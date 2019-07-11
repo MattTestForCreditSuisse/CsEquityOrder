@@ -1,13 +1,13 @@
 ﻿using System;
 using FakeItEasy;
 using MattDowning.EquityOrder.Domain;
+using MattDowning.EquityOrder.Domain.Orders;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 using NUnit.Framework;
 
 namespace MattDowning.EquityOrder.Tests.Domain
 {
-    public class EquityOrderTests
+    public class EquityOrderBuyTests
     {
         private readonly string equityCode = "MSFT";
         private readonly decimal threshold = 5;
@@ -22,25 +22,25 @@ namespace MattDowning.EquityOrder.Tests.Domain
         }
 
         [Test]
-        public void EquityOrder_WhenPriceBelowThreshold_OrderPlaced()
+        public void EquityOrderBuy_WhenPriceBelowThreshold_OrderPlaced()
         {
-            IEquityOrder sut = new EquityOrderFactory(orderServiceFake, loggerFake).Create(OrderType.Buy, equityCode, quantity, threshold);
+            IEquityOrder sut = new EquityOrderBuy(orderServiceFake, equityCode, quantity, threshold, loggerFake);
             sut.ReceiveTick(equityCode, 4);
             A.CallTo(() => orderServiceFake.Buy(equityCode, quantity, 4)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public void EquityOrder_WhenPriceAboveThreshold_NoOrder()
+        public void EquityOrderBuy_WhenPriceAboveThreshold_NoOrder()
         {
-            IEquityOrder sut = new EquityOrderFactory(orderServiceFake, loggerFake).Create(OrderType.Buy, equityCode, quantity, threshold);
+            IEquityOrder sut = new EquityOrderBuy(orderServiceFake, equityCode, quantity, threshold, loggerFake);
             sut.ReceiveTick(equityCode, 6);
             A.CallTo(() => orderServiceFake.Buy(equityCode, quantity, 4)).MustNotHaveHappened();
         }
 
         [Test]
-        public void EquityOrder_WhenTwoCallsBelowThreshold_OnlyOneOrderPlaced()
+        public void EquityOrderBuy_WhenTwoCallsBelowThreshold_OnlyOneOrderPlaced()
         {
-            IEquityOrder sut = new EquityOrderFactory(orderServiceFake, loggerFake).Create(OrderType.Buy, equityCode, quantity, threshold);
+            IEquityOrder sut = new EquityOrderBuy(orderServiceFake, equityCode, quantity, threshold, loggerFake);
             sut.ReceiveTick(equityCode, 4);
             sut.ReceiveTick(equityCode, 3);
             A.CallTo(() => orderServiceFake.Buy(equityCode, quantity, 4)).MustHaveHappenedOnceExactly();

@@ -1,4 +1,4 @@
-﻿namespace MattDowning.EquityOrder.Domain
+﻿namespace MattDowning.EquityOrder.Domain.OrderEvents
 {
     public interface IOrderPlaced
     {

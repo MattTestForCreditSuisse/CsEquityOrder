@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using FakeItEasy;
 using MattDowning.EquityOrder.Domain;
+using MattDowning.EquityOrder.Domain.Orders;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
